@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, TextInput, Text, Button, StyleSheet, Alert, AsyncStorage } from 'react-native';
+import { View, Text, Button, StyleSheet, TextInput, Alert, AsyncStorage } from 'react-native';
+import USER_TOKEN from '../../api/UserInfo';
 
-export default class CreateAccountScreen extends React.Component {
+export default class SignUpScreen extends React.Component {
 
   static navigationOptions = {
     headerStyle: {
@@ -18,11 +19,13 @@ export default class CreateAccountScreen extends React.Component {
       lastname: '',
       email: '',
       password: '',
-      userID: null,
+      user_ID: '',
     };
   }
 
   async _storeUserToken(token) {
+
+    console.log(token);
 
     try {
       await AsyncStorage.setItem('@USERTOKEN', token);
@@ -31,22 +34,16 @@ export default class CreateAccountScreen extends React.Component {
     }
   }
 
-  _createAccount() {
+  _loginAccount() {
 
-    if (this.state.firstName === '' || this.state.lastName === '' || this.state.email === '' || this.state.password === '') {
-      Alert.alert('', 'All fields are required!');
-      return;
-    }
-
-    return fetch('http://localhost:3000/api/users', {
+    return fetch('http://localhost:3000/api/users/login', {
       method: 'POST',
+      credentials: 'include',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        firstname: this.state.firstName,
-        lastname: this.state.lastName,
         email: this.state.email,
         password: this.state.password
       })
@@ -62,21 +59,7 @@ export default class CreateAccountScreen extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: '#3d495f' }}>
-        <Text style={styles.title}>Account Details</Text>
-        <Text style={styles.text}>First Name</Text>
-        <TextInput
-          style={styles.textInput}
-          selectionColor={'#fff'}
-          onChangeText={(firstName) => this.setState({firstName})}
-          value={this.state.firstName}
-        />
-        <Text style={styles.text}>Last Name</Text>
-        <TextInput
-          style={styles.textInput}
-          selectionColor={'#fff'}
-          onChangeText={(lastName) => this.setState({lastName})}
-          value={this.state.lastName}
-        />
+        <Text style={styles.title}>Account Login</Text>
         <Text style={styles.text}>Email</Text>
         <TextInput
           style={styles.textInput}
@@ -93,8 +76,8 @@ export default class CreateAccountScreen extends React.Component {
           value={this.state.password}
         />
         <Button 
-          title="Submit" 
-          onPress={() => this._createAccount()}>
+          title="Submit"
+          onPress={() => this._loginAccount()}>
         </Button>
       </View>
     );
