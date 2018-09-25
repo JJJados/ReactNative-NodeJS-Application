@@ -1,1 +1,1 @@
-Just a personal side project to test user authentication with NodeJS and React Native.
+Just a personal side project to test user authentication, geolocation, and other features with NodeJS and React Native.
